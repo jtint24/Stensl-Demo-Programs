@@ -1,0 +1,89 @@
+/*
+dndSimulator
+
+In the Dungeons and Dragons game, much of the gameplay is performed via "status checks," which are rolls of
+a 20-sided die. Under some conditions, these rolls can be made "with advantage," meaning that the player rolls
+twice and takes the higher of the two rolls. In other cases, rolls are made "with disadvantage," where the
+player takes the lowest of two rolls. In rare cases when both advantage and disadvantage are in effect, the
+player just rolls once normally. But is this actually statistically fair?
+
+To test this question, this program analyzes the average result of various dice roll scenarios. The program
+starts by printing the mean roll of a single unmodified 20-sided dice, followed by the average result of an
+advantage roll and a disadvantage roll. It then finds the average result of a scenario where both advantage
+and disadvantage are taken. One such scenario is where the player rolls two pairs of dice, takes the highest
+of each pair, and then takes the lowest of each highest: the "advantage then disadvantage roll." The second
+scenario is where the player rolls two pairs of dice, takes the lowest of each pair, then takes the highest
+of the two lowest: the "disadvantage then advantage roll." If taking both advantage and disadvantage is truly
+equivalent to an unmodified dice roll, as the Dungeons and Dragons rules suggest, then the average roll in
+each scenario should be the same. However, as this program proves, all 3 scenarios are actually slightly
+different.
+
+This program takes full advantage of Stensl's functional elements by representing statistical distributions
+as functions, then performing mutations on them like advantage or disadvantage as functions which accept the
+distributions as arguments. Additionally, the function that computes the average of a distribution accepts a
+function as an argument by a similar scheme. In a language without functions as first-class citizens, this
+would be far more difficult to achieve and would have a far lower degree of code reuse. This program also
+demos the use of for loops.
+*/
+func float disadvantageDist((int)->float distA, (int)->float distB, int x) { //gets the result of a disadvantage distribution of two other distributions at a particular value
+     var float probSum = 0
+     for x, 20 {(int index) {
+     	 probSum = probSum + (distA(index)*distB(x))
+     }
+     for x+1,20 {(int index)
+     	 probSum = probSum + (distB(index)*distA(x))
+     }
+     return (probSum)
+}
+
+func float diceRoll(int xxx) { //The probability of a particular dice roll of a 20 sided dice.
+    return (.05)
+}
+
+func float distMean((int)->float dist) { //Gets the mean result of a distribution
+     var float mean = 0
+     for 1, 20 {(int roll)
+     	 //println(str(roll)&" is the roll for distMean")
+     	 //println(dist(roll))
+     	 mean = mean + (dist(roll)*float(roll))
+     }
+     return mean
+}
+
+func float disadvantageRoll(int xx) { // a 
+     return disadvantageDist(diceRoll, diceRoll, xx)
+}
+
+func float advantageDist((int)->float distA, (int)->float distB, int x) {
+     var float probSum = 0
+     for 1,x {(int index)
+     	 probSum = probSum + (distA(index)*distB(x))
+     }
+     for 1,x-1 {(int index)
+     	 probSum = probSum + (distB(index)*distA(x))
+     }
+     return (probSum)
+}
+
+func float advantageRoll(int x) {
+     return advantageDist(diceRoll, diceRoll, x)
+}
+
+func float combinedRollDA(int x) {
+     return disadvantageDist(advantageRoll, advantageRoll, x)
+}
+
+func float combinedRollAD(int x) {
+     return advantageDist(disadvantageRoll, disadvantageRoll, x)
+}
+
+println("regular roll average:")
+println(distMean(diceRoll))
+println("disadvantage roll average:")
+println(distMean(disadvantageRoll))
+println("advantage roll average:")
+println(distMean(advantageRoll))
+println("combined roll average (disadvantage then advantage):")
+println(distMean(combinedRollDA))
+println("combined roll average (advantage then disadvantage):")
+println(distMean(combinedRollAD))

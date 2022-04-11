@@ -1,0 +1,24 @@
+/*
+quine
+
+A quine is a program which is able to print itself out. Quines are possible in any Turing-complete language
+with full output capabilities. This particular quine prints itself out, minus comments.
+
+This program demonstrates the use of arrays as well as looping and string operations.
+*/
+
+var string quote = ascii(34)
+var string rightSquareBracket = ascii(93)
+var string commaSpace = ascii(44)&ascii(32)
+var [string] lines = ["var string quote = ascii(34)", "var string rightSquareBracket = ascii(93)", "var string commaSpace = ascii(44)&ascii(32)", "var [string] lines = [", "for 0,2 {(int i)", "     println(lines[i])", "}", "print(lines[3])", "for 0, lines.length()-2 {(int i)", "     print(quote&lines[i]&quote&commaSpace)", "}", "println(quote&lines[14]&quote&rightSquareBracket)", "for 4, lines.length()-1 {(int i)", "     println(lines[i])", "}"]
+for 0,2 {(int i)
+     println(lines[i])
+}
+print(lines[3])
+for 0, lines.length()-2 {(int i)
+     print(quote&lines[i]&quote&commaSpace)
+}
+println(quote&lines[14]&quote&rightSquareBracket)
+for 4, lines.length()-1 {(int i)
+     println(lines[i])
+}

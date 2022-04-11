@@ -1,0 +1,68 @@
+/*
+RockPaperScissors Player
+
+This runs 100 rounds of a computer-vs-computer game of rock-paper-scissors. Because Stensl does not have a
+built-in random number generator, one has been implemented as a class below, using a modified version of Von
+Neumann's middle-square method with two seeds instead of 1 for maximum period. It uses this RNG to determine
+what each computerized player in the game throws. It then determines which player wins and advances to the
+next round.
+
+This program demonstrates the use of classes, as well as functions and looping.
+*/
+
+class RandomNumberGenerator { //The random number generator
+      var private int firstSeed = 9999 //4-digit random seed
+      var private int secondSeed = 4325 //4-digit random seed
+      func int getRandom(int max) { //gets a random number from 0 to max-1
+        var firstMiddle = extractMiddleSquare(firstSeed) //uses Von Neumann's middle square method on the first seed
+        var secondMiddle = extractMiddleSquare(secondSeed) //uses Von Neumann's middle square method on the second seed
+	    var wholeMiddle = firstMiddle*10000+secondMiddle //combines the middles into one whole random from 0-99999999
+	    secondSeed = firstMiddle+1 //swaps the second seed with an incremented firstMiddle
+	    firstSeed = secondMiddle+1 //swaps the first seed with an incremented secondMiddle
+	    return (wholeMiddle/2) % max //uses modulo to coerce the whole random number to a random number from 0 to max-1
+      }
+}
+func int extractMiddleSquare(int x) { //performs 4-digit middle-square extraction on x
+     var square = x*x //finds the square of x
+     var frontVal = square/100 //gets the front 6 digits of the square
+     var midVal = frontVal % 10000 //gets the back 4 digits of the frontVal, to find the middle 4 digits
+     return midVal //return the middle 4 digits
+}
+
+
+var myRNG = RandomNumberGenerator() //creates a random number generator
+
+func string getRandomHand() { //gets a random number and finds a matching hand
+     var randomNumber = myRNG.getRandom(3) //gets a random number from 0-2
+     if randomNumber==0 { //returns rock for 0
+     	return "rock"
+     }
+     if randomNumber==1 { //returns paper for 1
+     	return "paper"
+     } else { //returns scissors for 2
+       return "scissors"
+     }
+}
+
+func void runRound() { //run a single round of rock paper scissors
+    var hand1 = getRandomHand() //gets the 1st player's hand
+    var hand2 = getRandomHand() //gets  the 2nd player's hand
+    println("Computer 1 has selected: "&hand1) //print the players' hands
+    println("Computer 2 has selected: "&hand2)
+    if hand1 == hand2 { // if  the hands are the  same, print a tie
+        println("It's a tie!")
+        return
+    }
+    var handTag = hand1 & hand2
+    if handTag == "rockscissors" || handTag == "scissorspaper" || handTag == "paperrock" { //print computer 1 wins for 3 winning cases
+        println("Computer 1 wins!")
+        return
+    } else { //otherwise, it must be a computer 2 win
+        println("Computer 2 wins!")
+        return
+    }
+}
+
+for 1,100 {(int i) //runs 100 rounds
+    runRound()
+}
