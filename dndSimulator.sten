@@ -45,16 +45,16 @@ func float distMean((int)->float dist) { //Gets the mean result of a distributio
      for 1, 20 {(int roll)
      	 //println(str(roll)&" is the roll for distMean")
      	 //println(dist(roll))
-     	 mean = mean + (dist(roll)*float(roll))
+     	 mean = mean + (dist(roll)*float(roll)) //sums each possibility times its probability
      }
      return mean
 }
 
-func float disadvantageRoll(int xx) { // a 
+func float disadvantageRoll(int xx) { // a distribution of rolling with disadvantage
      return disadvantageDist(diceRoll, diceRoll, xx)
 }
 
-func float advantageDist((int)->float distA, (int)->float distB, int x) {
+func float advantageDist((int)->float distA, (int)->float distB, int x) { // returns the result of a distribution of the advantage of two distributions at a particular value
      var float probSum = 0
      for 1,x {(int index)
      	 probSum = probSum + (distA(index)*distB(x))
@@ -65,15 +65,15 @@ func float advantageDist((int)->float distA, (int)->float distB, int x) {
      return (probSum)
 }
 
-func float advantageRoll(int x) {
+func float advantageRoll(int x) { // a distribution of the advantage of two normal dice rolls
      return advantageDist(diceRoll, diceRoll, x)
 }
 
-func float combinedRollDA(int x) {
+func float combinedRollDA(int x) { // a distribution of the "disadvantage-advantage" scenario
      return disadvantageDist(advantageRoll, advantageRoll, x)
 }
 
-func float combinedRollAD(int x) {
+func float combinedRollAD(int x) { // a distribution of the "advantage-disadvantage" scenario
      return advantageDist(disadvantageRoll, disadvantageRoll, x)
 }
 
